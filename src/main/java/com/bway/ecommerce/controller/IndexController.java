@@ -30,11 +30,10 @@ public class IndexController {
 		return "shop";
 	}
 	
-	@GetMapping("/shop/category/{id}")
-	public String shopByCategory(Model model, @PathVariable long id) {
-		 model.addAttribute("categories", catService.getAllCats());
-		  model.addAttribute("products", productService.getProductById(id));
-		return "shop";
+	@GetMapping("/shop/viewproduct/{id}")
+	public String viewProduct(Model model, @PathVariable Long id) {
+		  model.addAttribute("product", productService.getProductById(id));
+		return "viewProduct";
 	}
 	@GetMapping("/admin")
 	public String getAdmin() {

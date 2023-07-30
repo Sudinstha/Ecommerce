@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -19,12 +18,12 @@ public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	private String title;
 	@Column( columnDefinition = "text")
 	private String description;
-	@ManyToOne
-	@JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
+	@OneToOne
+	@JoinColumn(name = "categoryId")
 	private Category category;
 	@OneToOne
 	@JoinColumn(name = "brandId")
