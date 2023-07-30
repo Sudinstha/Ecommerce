@@ -29,5 +29,5 @@ public class Product {
 	@JoinColumn(name = "brandId")
 	private Brand brand;
 	private String image;
-	private String price;
+	private Double price;
 }

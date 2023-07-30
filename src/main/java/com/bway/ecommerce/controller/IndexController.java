@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.bway.ecommerce.global.GlobalData;
 import com.bway.ecommerce.service.CategoryService;
 import com.bway.ecommerce.service.ProductService;
 
@@ -19,12 +20,14 @@ public class IndexController {
 	ProductService productService;
 	@GetMapping("/")
 	public String getIndex(Model model) {
+		model.addAttribute("cartCount", GlobalData.cart.size());
 	  model.addAttribute("categories", catService.getAllCats());
 	  model.addAttribute("products", productService.getAllProducts());
 		return "index";
 	}
 	@GetMapping("/shop")
 	public String shop(Model model) {
+		model.addAttribute("cartCount", GlobalData.cart.size());
 		 model.addAttribute("categories", catService.getAllCats());
 		  model.addAttribute("products", productService.getAllProducts());
 		return "shop";
@@ -32,9 +35,12 @@ public class IndexController {
 	
 	@GetMapping("/shop/viewproduct/{id}")
 	public String viewProduct(Model model, @PathVariable Long id) {
-		  model.addAttribute("product", productService.getProductById(id));
+		model.addAttribute("cartCount", GlobalData.cart.size());  
+		model.addAttribute("product", productService.getProductById(id));
 		return "viewProduct";
 	}
+	
+	
 	@GetMapping("/admin")
 	public String getAdmin() {
 		return "admin";
