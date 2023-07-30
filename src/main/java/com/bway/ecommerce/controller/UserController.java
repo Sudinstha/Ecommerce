@@ -1,8 +1,6 @@
 package com.bway.ecommerce.controller;
 
 import javax.servlet.http.HttpSession;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,18 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.bway.ecommerce.Utils.mailUtils;
 import com.bway.ecommerce.model.User;
 import com.bway.ecommerce.service.UserService;
-
-
-
-
 
 @Controller
 @RequestMapping("/user")
 
 public class UserController {
-	
+	@Autowired
+	private mailUtils mailUtil;
 	@Autowired
 	private UserService userService;
 
@@ -66,6 +63,16 @@ public class UserController {
 		
 		session.invalidate();
 		return "login";
+	}
+	
+	@GetMapping("/forgetpwd")
+	public String getForgetpwd() {
+		return "forgetpwd";
+	}
+	@PostMapping("/forgetpwd")
+	public String postForgetpwd(@RequestParam String toEmail) {
+		mailUtil.forgetpwdEmail(toEmail);
+		return "forgetpwd";
 	}
 	
 	
