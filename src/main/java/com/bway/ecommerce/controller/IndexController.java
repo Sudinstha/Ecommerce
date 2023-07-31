@@ -2,6 +2,8 @@ package com.bway.ecommerce.controller;
 
 
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +21,10 @@ public class IndexController {
 	@Autowired
 	ProductService productService;
 	@GetMapping("/")
-	public String getIndex(Model model) {
+	public String getIndex(Model model,HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		model.addAttribute("cartCount", GlobalData.cart.size());
 	  model.addAttribute("categories", catService.getAllCats());
 	  model.addAttribute("products", productService.getAllProducts());
@@ -42,7 +47,10 @@ public class IndexController {
 	
 	
 	@GetMapping("/admin")
-	public String getAdmin() {
+	public String getAdmin(HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		return "admin";
 	}
 	

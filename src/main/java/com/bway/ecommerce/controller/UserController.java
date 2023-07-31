@@ -15,8 +15,6 @@ import com.bway.ecommerce.model.User;
 import com.bway.ecommerce.service.UserService;
 
 @Controller
-@RequestMapping("/user")
-
 public class UserController {
 	@Autowired
 	private mailUtils mailUtil;
@@ -29,14 +27,15 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String postLogin(@ModelAttribute User user, Model model){
+	public String postLogin(@ModelAttribute User user, Model model,HttpSession session){
 	
 		user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 		User usr = userService.login(user.getEmail(),user.getPassword());
 
 		if(usr != null) {
-			
-			return "admin";
+			session.setAttribute("validuser", usr);
+			session.setMaxInactiveInterval(300);
+			return "index";
 		}
 		
 		model.addAttribute("message","user not found");

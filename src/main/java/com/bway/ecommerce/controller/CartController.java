@@ -26,8 +26,7 @@ public class CartController {
 	public String cartGet(Model model) {
 		model.addAttribute("cartCount", GlobalData.cart.size());
 		model.addAttribute("total", GlobalData.cart.stream().mapToDouble(Product::getPrice).sum());
-		model.addAttribute("cart", GlobalData.cart);
-		
+		model.addAttribute("cart", GlobalData.cart);	
 		return "cart";
 	}
 	@GetMapping("/cart/removeItem/{index}")
