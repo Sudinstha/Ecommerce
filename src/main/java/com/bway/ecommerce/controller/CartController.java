@@ -1,5 +1,7 @@
 package com.bway.ecommerce.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +20,16 @@ public class CartController {
 	
 	@GetMapping("/addToCart/{id}")
 	public String addToCart(@PathVariable Long id) {
+		
 		GlobalData.cart.add(productService.getProductById(id));
 		return "redirect:/shop";
 	}
 	
 	@GetMapping("/cart")
-	public String cartGet(Model model) {
+	public String cartGet(Model model, HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}  
 		model.addAttribute("cartCount", GlobalData.cart.size());
 		model.addAttribute("total", GlobalData.cart.stream().mapToDouble(Product::getPrice).sum());
 		model.addAttribute("cart", GlobalData.cart);	
@@ -35,7 +41,10 @@ public class CartController {
 		return "redirect:/cart";
 	}
 	@GetMapping("/checkout")
-	public String checkout(Model model) {
+	public String checkout(Model model, HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}  
 		model.addAttribute("total", GlobalData.cart.stream().mapToDouble(Product::getPrice).sum());
 		return "checkout";
 	}

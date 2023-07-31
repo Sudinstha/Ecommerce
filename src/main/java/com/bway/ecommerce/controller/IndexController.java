@@ -31,7 +31,10 @@ public class IndexController {
 		return "index";
 	}
 	@GetMapping("/shop")
-	public String shop(Model model) {
+	public String shop(Model model,HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		model.addAttribute("cartCount", GlobalData.cart.size());
 		 model.addAttribute("categories", catService.getAllCats());
 		  model.addAttribute("products", productService.getAllProducts());
@@ -39,7 +42,11 @@ public class IndexController {
 	}
 	
 	@GetMapping("/shop/viewproduct/{id}")
-	public String viewProduct(Model model, @PathVariable Long id) {
+	
+	public String viewProduct(Model model, @PathVariable Long id,HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		model.addAttribute("cartCount", GlobalData.cart.size());  
 		model.addAttribute("product", productService.getProductById(id));
 		return "viewProduct";

@@ -2,6 +2,8 @@ package com.bway.ecommerce.controller;
 
 
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,13 +31,19 @@ public class BrandController {
 	  private BrandService brandService;
 	 
 	@GetMapping("/add")
-	public String getBrand() {
+	public String getBrand(HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		return "brandadd";
 	}
 	
 	@PostMapping("/add")
-	public String postBrand(@ModelAttribute Brand brand,@RequestParam MultipartFile photo ) {
+	public String postBrand(HttpSession session,@ModelAttribute Brand brand,@RequestParam MultipartFile photo ) {
 
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		if(!photo.isEmpty()) {
 			brand.setImage(photo.getOriginalFilename());
 			fileUtil.fileUploadBrand(photo);
@@ -45,24 +53,36 @@ public class BrandController {
 		return "brandadd";
 	}
 	@GetMapping("/list")
-	public String brandList(Model model) {
+	public String brandList(Model model,HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		model.addAttribute("brandList", brandService.getAllBrands());
 	return "brandlist";
 	}
 	
 	@GetMapping("/edit")
-	public String edit(@RequestParam long id, Model model){
-		model.addAttribute("brandObject", brandService.getBrandById(id));
+	public String edit(@RequestParam long id, Model model, HttpSession session){
+		
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}model.addAttribute("brandObject", brandService.getBrandById(id));
 		return "brandedit";
 	}
 	@GetMapping("/delete")
-	public String delete(@RequestParam long id) {
+	public String delete(@RequestParam long id, HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		}
 		brandService.deleteBrand(id);
 		return "redirect:/brand/list";
 	}
 	@PostMapping("/update")
-	public String update(@ModelAttribute Brand brand) {
-		 brandService.updateBrand(brand);
+	public String update(@ModelAttribute Brand brand, HttpSession session) {
+		if(session.getAttribute("validuser") == null) {
+			return "login";
+		} 
+		brandService.updateBrand(brand);
 		 return "redirect:/brand/list";
 	}
 }
